@@ -3,8 +3,8 @@
 use Elasticsearch\ClientBuilder;
 require 'vendor/autoload.php';
 
-function indexSite($url, $elementType, $elementText){
 
+function indexSite($url, $elementType, $elementText){
     $client = ClientBuilder::create()->build();
     $indexName = transformUrlToIndexName($url);
 
@@ -14,19 +14,8 @@ function indexSite($url, $elementType, $elementText){
         
     $element = findElement($dom, $elementType, $elementText);
     $array = transformToArray(getNextSiblingNode($element), $element->nodeName, $elementText);
-        
-    foreach ($array as $i=>$row){
-        $params = [
-            'index' => $indexName,
-            'id' => $i,
-            'body' => $row
-        ];
-        try{
-            $response = $client->index($params);
-        } catch (Exception $e) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n";
-        } 
-    }
+    
+    indexData($array, $indexName, $client);   
 }
     
 function getDom($url){
@@ -36,7 +25,6 @@ function getDom($url){
 }
 
 function createIndex($indexName, $client){
-
     $params = ['index' => $indexName];
     if ($client->indices()->exists($params)){
         return;
@@ -73,7 +61,21 @@ function createIndex($indexName, $client){
     } catch (Exception $e) {
         echo 'Caught exception: ',  $e->getMessage(), "\n";
     } 
+}
 
+function indexData($array, $indexName, $client){
+    foreach ($array as $i=>$row){
+        $params = [
+            'index' => $indexName,
+            'id' => $i,
+            'body' => $row
+        ];
+        try{
+            $response = $client->index($params);
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        } 
+    }
 }
 
 function transformUrlToIndexName($url){
@@ -150,7 +152,7 @@ function getSectionNameFromText($text){
    return str_replace(" ", "-", $text); 
 }
 
-function getIndexData($url, $sectionName ){
+function getIndexData($url, $sectionName){
     $client = ClientBuilder::create()->build();
     
     $indexName = transformUrlToIndexName($url);
