@@ -19,7 +19,7 @@
                 <input type = "text" name = "url" value="<?php echo $_POST['url']; ?>"><br>
                 <label>Vložte text nadpisu</label>
                 <input type = "text" value ="<?php echo $_POST['elementText']; ?>" name ="elementText"><br>
-                <input type="submit"value = "Odeslat">
+                <input type="submit" value = "Odeslat">
             </form>
         <?php
             }else{
