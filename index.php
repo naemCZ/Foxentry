@@ -25,8 +25,6 @@
             }else{
                indexSite($_POST['url'], "h", $_POST['elementText']); 
                $data = getIndexData($_POST['url'], $_POST['elementText']);
-               
-            
         ?>
             <table>
                 <tr>
