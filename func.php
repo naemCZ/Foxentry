@@ -3,7 +3,6 @@
 use Elasticsearch\ClientBuilder;
 require 'vendor/autoload.php';
 
-
 function indexSite($url, $elementType, $elementText){
 
     $client = ClientBuilder::create()->build();
